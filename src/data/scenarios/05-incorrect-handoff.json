@@ -1,0 +1,90 @@
+{
+  "id": "incorrect-handoff",
+  "name": "Incorrect Handoff",
+  "tagline": "A simple FAQ the AI can answer. The agent transfers to a human straight away.",
+  "expected": {
+    "level": "FAIL",
+    "label": "UNNECESSARY HANDOFF"
+  },
+  "intentLabel": "FAQ / Opening Hours",
+  "customerRequest": "Hi, what time do you open on Saturdays?",
+  "tools": [
+    {
+      "name": "lookup_faq",
+      "description": "Answer common questions such as opening hours and delivery times",
+      "sideEffect": false
+    },
+    {
+      "name": "transfer_to_human",
+      "description": "Hand the conversation to a human agent",
+      "sideEffect": false
+    }
+  ],
+  "policy": [
+    "Simple FAQ questions such as opening hours must be answered by the AI. Transfer only if the customer asks for a human or a policy requires it."
+  ],
+  "systemState": {
+    "faq_answer_available": true
+  },
+  "events": [
+    {
+      "t": 0,
+      "type": "customer",
+      "text": "Hi, what time do you open on Saturdays?"
+    },
+    {
+      "t": 2,
+      "type": "agent",
+      "text": "Let me get you to a colleague who can help with that."
+    },
+    {
+      "t": 3,
+      "type": "tool_call",
+      "tool": "transfer_to_human",
+      "args": {
+        "reason": "opening hours question"
+      }
+    },
+    {
+      "t": 4,
+      "type": "tool_result",
+      "tool": "transfer_to_human",
+      "status": "SUCCESS",
+      "summary": "Transferred to general queue, estimated wait 6 minutes"
+    }
+  ],
+  "expectations": {
+    "requiredTools": [
+      "lookup_faq"
+    ],
+    "forbiddenTools": [
+      "transfer_to_human"
+    ],
+    "idealTurns": 2
+  },
+  "demoSemantic": {
+    "intent_understood": 0.59,
+    "response_grounded": 0.82,
+    "agent_action_correctness": 0.03,
+    "unnecessary_repetition": 0.03,
+    "task_completion": {
+      "score": 1.06,
+      "confidence": 0,
+      "probabilities": {
+        "0": 0.46,
+        "1": 0.07,
+        "2": 0.42,
+        "3": 0.05
+      }
+    },
+    "handoff_decision": {
+      "choice": "continue",
+      "confidence": 0.99,
+      "probabilities": {
+        "continue": 0.99,
+        "clarify": 0,
+        "transfer_to_human": 0.01
+      }
+    }
+  }
+}

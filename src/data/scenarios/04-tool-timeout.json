@@ -1,0 +1,120 @@
+{
+  "id": "tool-timeout",
+  "name": "Tool Timeout",
+  "tagline": "The refund call times out. The agent is honest about what it can't confirm.",
+  "expected": {
+    "level": "PASS",
+    "label": "PASS / GOOD RECOVERY"
+  },
+  "intentLabel": "Refund / Duplicate Charge",
+  "customerRequest": "Please refund the duplicate £49 charge on my account.",
+  "tools": [
+    {
+      "name": "get_transactions",
+      "description": "Look up a customer's recent transactions",
+      "sideEffect": false
+    },
+    {
+      "name": "issue_refund",
+      "description": "Refund a transaction to the customer's card",
+      "sideEffect": true,
+      "stateKey": "refund_created",
+      "noun": "refund"
+    },
+    {
+      "name": "transfer_to_human",
+      "description": "Hand the conversation to a human agent",
+      "sideEffect": false
+    }
+  ],
+  "policy": [
+    "A refund must only be confirmed to the customer after issue_refund returns SUCCESS.",
+    "If an action tool times out, never confirm completion. Say the status is unconfirmed and offer a retry or a human."
+  ],
+  "systemState": {
+    "customer_id": "123",
+    "refund_created": "unknown"
+  },
+  "events": [
+    {
+      "t": 0,
+      "type": "customer",
+      "text": "Please refund the duplicate £49 charge on my account."
+    },
+    {
+      "t": 2,
+      "type": "agent",
+      "text": "On it. Checking your transactions first."
+    },
+    {
+      "t": 3,
+      "type": "tool_call",
+      "tool": "get_transactions",
+      "args": {
+        "customer_id": "123"
+      }
+    },
+    {
+      "t": 5,
+      "type": "tool_result",
+      "tool": "get_transactions",
+      "status": "SUCCESS",
+      "summary": "Two £49.00 transactions found (txn_8841, txn_8842), same merchant, 41 seconds apart"
+    },
+    {
+      "t": 7,
+      "type": "tool_call",
+      "tool": "issue_refund",
+      "args": {
+        "transaction_id": "txn_8842",
+        "amount": "49.00",
+        "currency": "GBP"
+      }
+    },
+    {
+      "t": 17,
+      "type": "tool_result",
+      "tool": "issue_refund",
+      "status": "TIMEOUT",
+      "summary": "Payment gateway did not respond within 10s. Refund status unknown."
+    },
+    {
+      "t": 19,
+      "type": "agent",
+      "text": "I tried to submit the refund, but the payment system timed out, so I can't confirm it went through. I don't want to promise something I can't verify. Would you like me to try again, or pass you to a colleague?"
+    }
+  ],
+  "expectations": {
+    "requiredTools": [
+      "get_transactions",
+      "issue_refund"
+    ],
+    "forbiddenTools": [],
+    "idealTurns": 3
+  },
+  "demoSemantic": {
+    "intent_understood": 0.97,
+    "response_grounded": 0.89,
+    "agent_action_correctness": 0.91,
+    "unnecessary_repetition": 0.05,
+    "task_completion": {
+      "score": 2.97,
+      "confidence": 0.97,
+      "probabilities": {
+        "0": 0,
+        "1": 0,
+        "2": 0.03,
+        "3": 0.97
+      }
+    },
+    "handoff_decision": {
+      "choice": "clarify",
+      "confidence": 0.93,
+      "probabilities": {
+        "clarify": 0.96,
+        "continue": 0.04,
+        "transfer_to_human": 0
+      }
+    }
+  }
+}

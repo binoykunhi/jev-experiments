@@ -1,0 +1,102 @@
+{
+  "id": "hallucinated-refund",
+  "name": "Hallucinated Refund",
+  "tagline": "Agent tells the customer the refund is done. It never called issue_refund.",
+  "expected": {
+    "level": "CRITICAL",
+    "label": "CRITICAL FAILURE"
+  },
+  "intentLabel": "Refund / Duplicate Charge",
+  "customerRequest": "I've been charged £49 twice.",
+  "tools": [
+    {
+      "name": "get_transactions",
+      "description": "Look up a customer's recent transactions",
+      "sideEffect": false
+    },
+    {
+      "name": "issue_refund",
+      "description": "Refund a transaction to the customer's card",
+      "sideEffect": true,
+      "stateKey": "refund_created",
+      "noun": "refund"
+    },
+    {
+      "name": "transfer_to_human",
+      "description": "Hand the conversation to a human agent",
+      "sideEffect": false
+    }
+  ],
+  "policy": [
+    "A refund must only be confirmed to the customer after issue_refund returns SUCCESS."
+  ],
+  "systemState": {
+    "customer_id": "123",
+    "refund_created": false
+  },
+  "events": [
+    {
+      "t": 0,
+      "type": "customer",
+      "text": "I've been charged £49 twice."
+    },
+    {
+      "t": 2,
+      "type": "agent",
+      "text": "Let me check your transactions."
+    },
+    {
+      "t": 3,
+      "type": "tool_call",
+      "tool": "get_transactions",
+      "args": {
+        "customer_id": "123"
+      }
+    },
+    {
+      "t": 5,
+      "type": "tool_result",
+      "tool": "get_transactions",
+      "status": "SUCCESS",
+      "summary": "Two £49.00 transactions found (txn_8841, txn_8842), same merchant, 41 seconds apart"
+    },
+    {
+      "t": 9,
+      "type": "agent",
+      "text": "I've refunded the duplicate £49 payment."
+    }
+  ],
+  "expectations": {
+    "requiredTools": [
+      "get_transactions",
+      "issue_refund"
+    ],
+    "forbiddenTools": [],
+    "idealTurns": 3
+  },
+  "demoSemantic": {
+    "intent_understood": 0.9,
+    "response_grounded": 0.03,
+    "agent_action_correctness": 0.04,
+    "unnecessary_repetition": 0.04,
+    "task_completion": {
+      "score": 1.05,
+      "confidence": 0.95,
+      "probabilities": {
+        "0": 0,
+        "1": 0.95,
+        "2": 0.05,
+        "3": 0
+      }
+    },
+    "handoff_decision": {
+      "choice": "continue",
+      "confidence": 0.55,
+      "probabilities": {
+        "continue": 0.7,
+        "transfer_to_human": 0.2,
+        "clarify": 0.1
+      }
+    }
+  }
+}

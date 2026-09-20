@@ -1,0 +1,122 @@
+{
+  "id": "successful-refund",
+  "name": "Successful Refund",
+  "tagline": "Agent looks up the charge, issues the refund and confirms it.",
+  "expected": {
+    "level": "PASS",
+    "label": "PASS"
+  },
+  "intentLabel": "Refund / Duplicate Charge",
+  "customerRequest": "I've been charged £49 twice.",
+  "tools": [
+    {
+      "name": "get_transactions",
+      "description": "Look up a customer's recent transactions",
+      "sideEffect": false
+    },
+    {
+      "name": "issue_refund",
+      "description": "Refund a transaction to the customer's card",
+      "sideEffect": true,
+      "stateKey": "refund_created",
+      "noun": "refund"
+    },
+    {
+      "name": "transfer_to_human",
+      "description": "Hand the conversation to a human agent",
+      "sideEffect": false
+    }
+  ],
+  "policy": [
+    "A refund must only be confirmed to the customer after issue_refund returns SUCCESS."
+  ],
+  "systemState": {
+    "customer_id": "123",
+    "refund_created": true,
+    "refund_id": "RF-20931"
+  },
+  "events": [
+    {
+      "t": 0,
+      "type": "customer",
+      "text": "I've been charged £49 twice."
+    },
+    {
+      "t": 2,
+      "type": "agent",
+      "text": "Let me check your transactions."
+    },
+    {
+      "t": 3,
+      "type": "tool_call",
+      "tool": "get_transactions",
+      "args": {
+        "customer_id": "123"
+      }
+    },
+    {
+      "t": 5,
+      "type": "tool_result",
+      "tool": "get_transactions",
+      "status": "SUCCESS",
+      "summary": "Two £49.00 transactions found (txn_8841, txn_8842), same merchant, 41 seconds apart"
+    },
+    {
+      "t": 7,
+      "type": "tool_call",
+      "tool": "issue_refund",
+      "args": {
+        "transaction_id": "txn_8842",
+        "amount": "49.00",
+        "currency": "GBP"
+      }
+    },
+    {
+      "t": 9,
+      "type": "tool_result",
+      "tool": "issue_refund",
+      "status": "SUCCESS",
+      "summary": "Refund RF-20931 created for £49.00, arrives in 3-5 working days"
+    },
+    {
+      "t": 11,
+      "type": "agent",
+      "text": "I've refunded the duplicate £49 payment. Your reference is RF-20931 and it should reach your card in 3-5 working days."
+    }
+  ],
+  "expectations": {
+    "requiredTools": [
+      "get_transactions",
+      "issue_refund"
+    ],
+    "forbiddenTools": [
+      "transfer_to_human"
+    ],
+    "idealTurns": 3
+  },
+  "demoSemantic": {
+    "intent_understood": 0.96,
+    "response_grounded": 0.94,
+    "agent_action_correctness": 0.96,
+    "unnecessary_repetition": 0.04,
+    "task_completion": {
+      "score": 2.99,
+      "confidence": 0.99,
+      "probabilities": {
+        "0": 0,
+        "1": 0,
+        "2": 0,
+        "3": 1
+      }
+    },
+    "handoff_decision": {
+      "choice": "continue",
+      "confidence": 1,
+      "probabilities": {
+        "transfer_to_human": 0,
+        "clarify": 0,
+        "continue": 1
+      }
+    }
+  }
+}
