@@ -1,0 +1,20 @@
+[
+ {"text": "Hi, I'd like to book an appointment for next week", "intent": "book"},
+ {"text": "Can I see Dr Patel on Thursday morning?", "intent": "book"},
+ {"text": "I need to move my appointment to Friday", "intent": "reschedule"},
+ {"text": "Can we push my visit back a couple of days", "intent": "reschedule"},
+ {"text": "Please cancel my appointment tomorrow", "intent": "cancel"},
+ {"text": "I can't make it on Monday, take me off the schedule", "intent": "cancel"},
+ {"text": "I need a refill on my blood pressure medication", "intent": "refill"},
+ {"text": "I'm running out of my inhaler", "intent": "refill"},
+ {"text": "I got a bill that looks wrong", "intent": "billing"},
+ {"text": "How do I pay my invoice", "intent": "billing"},
+ {"text": "What time do you close on Saturdays?", "intent": "hours"},
+ {"text": "Where are you located?", "intent": "hours"},
+ {"text": "Let me talk to a real person", "intent": "human"},
+ {"text": "Operator", "intent": "human"},
+ {"text": "My chest hurts and I can't breathe properly", "intent": "human", "urgent": true},
+ {"text": "Um, yeah, so, the thing", "intent": "other"},
+ {"text": "Do you sell parking permits?", "intent": "other"},
+ {"text": "This is the third time I'm calling and nobody helps me!", "intent": "human"}
+]
