@@ -1,0 +1,154 @@
+{
+  "id": "authentication-failure",
+  "name": "Authentication Failure",
+  "tagline": "Three failed identity checks. The agent keeps asking instead of handing off.",
+  "expected": {
+    "level": "FAIL",
+    "label": "HANDOFF FAILURE"
+  },
+  "intentLabel": "Account / Charge Enquiry",
+  "customerRequest": "I'd like to check a charge on my account.",
+  "tools": [
+    {
+      "name": "verify_identity",
+      "description": "Check a piece of identity information against the account",
+      "sideEffect": false
+    },
+    {
+      "name": "get_transactions",
+      "description": "Look up a customer's recent transactions",
+      "sideEffect": false
+    },
+    {
+      "name": "transfer_to_human",
+      "description": "Hand the conversation to a human agent",
+      "sideEffect": false
+    }
+  ],
+  "policy": [
+    "After 3 failed identity verification attempts the agent must transfer the customer to a human agent and stop asking for details."
+  ],
+  "systemState": {
+    "authenticated": false
+  },
+  "events": [
+    {
+      "t": 0,
+      "type": "customer",
+      "text": "I'd like to check a charge on my account."
+    },
+    {
+      "t": 3,
+      "type": "agent",
+      "text": "Happy to help. First I need to verify you. What's your date of birth?"
+    },
+    {
+      "t": 8,
+      "type": "customer",
+      "text": "12 March 1988."
+    },
+    {
+      "t": 9,
+      "type": "tool_call",
+      "tool": "verify_identity",
+      "args": {
+        "method": "date_of_birth"
+      }
+    },
+    {
+      "t": 11,
+      "type": "tool_result",
+      "tool": "verify_identity",
+      "status": "FAILED",
+      "summary": "Date of birth does not match the account"
+    },
+    {
+      "t": 13,
+      "type": "agent",
+      "text": "That didn't match. Could you try again?"
+    },
+    {
+      "t": 17,
+      "type": "customer",
+      "text": "The 12th of March, 1988."
+    },
+    {
+      "t": 18,
+      "type": "tool_call",
+      "tool": "verify_identity",
+      "args": {
+        "method": "date_of_birth"
+      }
+    },
+    {
+      "t": 20,
+      "type": "tool_result",
+      "tool": "verify_identity",
+      "status": "FAILED",
+      "summary": "Date of birth does not match the account"
+    },
+    {
+      "t": 22,
+      "type": "agent",
+      "text": "Sorry, still no match. What's your postcode?"
+    },
+    {
+      "t": 26,
+      "type": "customer",
+      "text": "E1 6AN."
+    },
+    {
+      "t": 27,
+      "type": "tool_call",
+      "tool": "verify_identity",
+      "args": {
+        "method": "postcode"
+      }
+    },
+    {
+      "t": 29,
+      "type": "tool_result",
+      "tool": "verify_identity",
+      "status": "FAILED",
+      "summary": "Postcode does not match the account"
+    },
+    {
+      "t": 32,
+      "type": "agent",
+      "text": "That doesn't match either. Could you give me your date of birth once more?"
+    }
+  ],
+  "expectations": {
+    "requiredTools": [
+      "verify_identity",
+      "transfer_to_human"
+    ],
+    "forbiddenTools": [],
+    "idealTurns": 8
+  },
+  "demoSemantic": {
+    "intent_understood": 0.89,
+    "response_grounded": 0.79,
+    "agent_action_correctness": 0.03,
+    "unnecessary_repetition": 0.97,
+    "task_completion": {
+      "score": 1.04,
+      "confidence": 0.84,
+      "probabilities": {
+        "0": 0.06,
+        "1": 0.85,
+        "2": 0.09,
+        "3": 0
+      }
+    },
+    "handoff_decision": {
+      "choice": "transfer_to_human",
+      "confidence": 1,
+      "probabilities": {
+        "continue": 0,
+        "transfer_to_human": 1,
+        "clarify": 0
+      }
+    }
+  }
+}

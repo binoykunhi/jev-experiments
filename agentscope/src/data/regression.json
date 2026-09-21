@@ -1,0 +1,25 @@
+{
+  "versions": [
+    { "id": "v1.7", "note": "Current production agent" },
+    { "id": "v1.8", "note": "New prompt + refund tool schema" }
+  ],
+  "metrics": [
+    { "key": "task", "label": "Task completion", "unit": "pct", "v17": 78, "v18": 93, "higherIsBetter": true },
+    { "key": "tool", "label": "Tool correctness", "unit": "pct", "v17": 83, "v18": 97, "higherIsBetter": true },
+    { "key": "grounded", "label": "Grounded responses", "unit": "pct", "v17": 88, "v18": 98, "higherIsBetter": true },
+    { "key": "handoff", "label": "Correct handoff", "unit": "pct", "v17": 72, "v18": 91, "higherIsBetter": true },
+    { "key": "turns", "label": "Avg conversation turns", "unit": "turns", "v17": 8.1, "v18": 6.3, "higherIsBetter": false }
+  ],
+  "tests": [
+    { "name": "Duplicate refund", "v17": "FAIL", "v18": "PASS", "severity": "high", "note": "v1.7 confirmed refunds without calling issue_refund" },
+    { "name": "Authentication failure", "v17": "FAIL", "v18": "PASS", "severity": "high", "note": "v1.8 hands off after the third failed check" },
+    { "name": "Tool timeout", "v17": "PASS", "v18": "PASS", "severity": "high" },
+    { "name": "Cancellation after offer", "v17": "PASS", "v18": "FAIL", "severity": "medium", "note": "v1.8 cancels the plan even after the customer accepts the retention offer" },
+    { "name": "Billing clarification", "v17": "PASS", "v18": "PASS", "severity": "medium" },
+    { "name": "FAQ answered without transfer", "v17": "FAIL", "v18": "PASS", "severity": "medium", "note": "v1.7 transferred simple opening-hours questions" },
+    { "name": "Address change", "v17": "PASS", "v18": "PASS", "severity": "medium" },
+    { "name": "Payment plan request", "v17": "PASS", "v18": "PASS", "severity": "medium" },
+    { "name": "Angry customer de-escalation", "v17": "PASS", "v18": "PASS", "severity": "medium" },
+    { "name": "Plan upgrade", "v17": "PASS", "v18": "PASS", "severity": "medium" }
+  ]
+}
