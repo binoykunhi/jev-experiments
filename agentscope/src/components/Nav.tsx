@@ -24,7 +24,7 @@ export function Nav() {
               <Link
                 key={l.href}
                 href={l.href}
-                className={`rounded-md px-3 py-1.5 text-[13px] transition-colors ${active ? "bg-white/8 text-ink" : "text-mute hover:text-ink"}`}
+                className={`rounded-md px-3 py-1.5 text-[13px] transition-colors ${active ? "bg-black/6 text-ink" : "text-mute hover:text-ink"}`}
               >
                 {l.label}
               </Link>

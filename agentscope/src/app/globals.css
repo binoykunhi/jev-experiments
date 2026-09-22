@@ -1,13 +1,13 @@
 @import "tailwindcss";
 
 :root {
-  --canvas: #090b0e;
-  --panel: #0f1216;
-  --panel-2: #141920;
-  --line: #222932;
-  --ink: #e8ebef;
-  --mute: #8b94a1;
-  --dim: #5c6572;
+  --canvas: #f6f7f9;
+  --panel: #ffffff;
+  --panel-2: #eef0f3;
+  --line: #e3e6eb;
+  --ink: #12151a;
+  --mute: #5b6472;
+  --dim: #94a0ae;
 }
 
 @theme inline {
@@ -22,7 +22,7 @@
   --font-mono: var(--font-geist-mono);
 }
 
-html { color-scheme: dark; }
+html { color-scheme: light; }
 body {
   background: var(--canvas);
   color: var(--ink);
@@ -44,7 +44,7 @@ body {
 .animate-critical { animation: critical-glow 2.2s ease-in-out infinite; }
 .animate-ping-dot { animation: ping-dot 1.6s cubic-bezier(0, 0, 0.2, 1) infinite; }
 .skeleton {
-  background: linear-gradient(90deg, var(--panel-2) 25%, #1b222b 50%, var(--panel-2) 75%);
+  background: linear-gradient(90deg, var(--panel-2) 25%, #ffffff 50%, var(--panel-2) 75%);
   background-size: 200% 100%;
   animation: shimmer 1.6s linear infinite;
 }

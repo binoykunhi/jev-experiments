@@ -66,7 +66,7 @@ export function FlightRecorder() {
               aria-selected={s.id === scenarioId}
               onClick={() => { setScenarioId(s.id); reset(); }}
               className={`rounded-lg border px-3.5 py-2 text-[13px] transition-colors ${
-                s.id === scenarioId ? "border-white/20 bg-white/8 text-ink" : "border-line text-mute hover:border-white/15 hover:text-ink"
+                s.id === scenarioId ? "border-black/15 bg-black/6 text-ink" : "border-line text-mute hover:border-black/10 hover:text-ink"
               }`}
             >
               {s.name}

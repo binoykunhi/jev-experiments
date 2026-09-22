@@ -5,11 +5,11 @@ import { Alert, Check, Siren, X } from "./icons";
 export type Tone = Status | "critical" | "info";
 
 export const TONE: Record<Tone, { text: string; soft: string; ring: string; solid: string; border: string }> = {
-  pass: { text: "text-emerald-300", soft: "bg-emerald-400/10", ring: "ring-emerald-400/25", solid: "bg-emerald-400", border: "border-emerald-400/30" },
-  warn: { text: "text-amber-300", soft: "bg-amber-300/10", ring: "ring-amber-300/25", solid: "bg-amber-300", border: "border-amber-300/30" },
-  fail: { text: "text-orange-300", soft: "bg-orange-400/10", ring: "ring-orange-400/25", solid: "bg-orange-400", border: "border-orange-400/30" },
-  critical: { text: "text-rose-300", soft: "bg-rose-500/10", ring: "ring-rose-500/40", solid: "bg-rose-500", border: "border-rose-500/50" },
-  info: { text: "text-mute", soft: "bg-white/5", ring: "ring-white/10", solid: "bg-dim", border: "border-line" },
+  pass: { text: "text-emerald-600", soft: "bg-emerald-500/10", ring: "ring-emerald-500/25", solid: "bg-emerald-500", border: "border-emerald-500/30" },
+  warn: { text: "text-amber-600", soft: "bg-amber-400/15", ring: "ring-amber-400/30", solid: "bg-amber-400", border: "border-amber-400/40" },
+  fail: { text: "text-orange-600", soft: "bg-orange-500/10", ring: "ring-orange-500/25", solid: "bg-orange-500", border: "border-orange-500/30" },
+  critical: { text: "text-rose-600", soft: "bg-rose-500/10", ring: "ring-rose-500/30", solid: "bg-rose-500", border: "border-rose-500/40" },
+  info: { text: "text-mute", soft: "bg-black/5", ring: "ring-black/10", solid: "bg-dim", border: "border-line" },
 };
 
 export const levelTone = (l: Level): Tone => (l === "PASS" ? "pass" : l === "WARNING" ? "warn" : l === "FAIL" ? "fail" : "critical");
@@ -50,7 +50,7 @@ export function CardHeader({ title, sub, right }: { title: string; sub?: string;
 
 export function Bar({ value, tone, delay = 0 }: { value: number; tone: Tone; delay?: number }) {
   return (
-    <div className="h-1 overflow-hidden rounded-full bg-white/5">
+    <div className="h-1 overflow-hidden rounded-full bg-black/5">
       <div
         className={`animate-grow h-full rounded-full ${TONE[tone].solid}`}
         style={{ width: `${Math.round(value * 100)}%`, animationDelay: `${delay}ms` }}
